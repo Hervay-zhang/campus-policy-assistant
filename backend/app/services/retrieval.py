@@ -109,12 +109,10 @@ async def retrieve(
     for item in vector_results:
         item['source'] = 'vector'
     print('-' * 20)
-    print(vector_results)
 
     # 第三 : modl分支,m是否启用了BM25关键词检索
     if mode=="vector":  # mode="vector：只使用语义检索，不开启关键词搜索，开发调试用
         print("-"*50)
-        print(vector_results)
         # keyword_list = list[dict]= []
         keyword_list = []
     #其他模型必须查询向量数据库＋bm25检索
@@ -122,7 +120,6 @@ async def retrieve(
         # 向量检索结果 + bm25检索结果 综合得分高的 作为候选数据
         keyword_list = await keyword_search(session, new_question, top_k * 2, filters)
         print('*'*20)
-        print(keyword_list)
 
 
     # 第五:下面是PRF多路结果融合

@@ -100,7 +100,6 @@ async def answer_question(
         contexts.append(f"[{index}] 文档：{filename},章节：{section},页码：{page}\n{content}")
     context = "\n\n".join(contexts
     )
-    print(content)
 
     prompt = f"""你是广东工业大学教务政策知识库助手（校园百事通）。必须遵守：
     1. 只能依据“教务政策证据”回答，不得使用外部知识补充政策内容。
@@ -117,7 +116,6 @@ async def answer_question(
 
     llm = create_chat_model(get_settings(), temperature=0)
     answer, usage = await invoke_text(llm, prompt)
-    print(answer,usage)
     # 将结果和之前的证据进行匹配，过掉中结果中不合理的编号
     answer, list_xh = validate_citations(answer, evidences)
     # 收集该答案对应的引用信息

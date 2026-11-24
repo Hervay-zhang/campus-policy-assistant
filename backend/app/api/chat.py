@@ -149,8 +149,8 @@ async def generate(chatRequest:ChatRequest):
                     "trace": result.trace if chatRequest.debug else None,
                 },
             )
-    except Exception as exc:
-        yield event("error", {"message": str(exc)})
+    except Exception:
+        yield event("error", {"message": "问答服务暂时不可用，请稍后重试。"})
 
 
 
