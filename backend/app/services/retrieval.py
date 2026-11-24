@@ -6,9 +6,7 @@ from app.services.model_factory import create_chat_model, invoke_text
 from app.services.vector_store import VectorStoreService
 import asyncio
 import re
-import jieba
 from app.services.pipeline_utils import reciprocal_rank_fusion, normalize_logit, filter_evidence
-from rank_bm25 import BM25Okapi
 from sqlalchemy import select
 from app.models import DocumentChunk, PolicyDocument
 
@@ -245,6 +243,8 @@ def tokenize_chinese(text:str) ->list[str]:
     """
     text_low = text.lower()
     # lcut_for_search：搜索模式，会把长词再细切，适合检索场景
+    import jieba
+
     words = jieba.lcut_for_search(text_low)
     word_list=[]
     for word in words:
@@ -291,6 +291,8 @@ async def keyword_search(
     # 使用bm25打分
     print("corpus的长度", len(corpus))
     # 将问题分词，然后计算每个词 和 这个问题的得分，他们的得分和词是一对一的关系
+    from rank_bm25 import BM25Okapi
+
     bm25_model = BM25Okapi(corpus)
     scores = bm25_model.get_scores(tokenize_chinese(query))
     print(scores)

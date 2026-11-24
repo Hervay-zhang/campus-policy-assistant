@@ -181,12 +181,13 @@ async def ingest_upload(session: Session,
 
 
 from pathlib import Path
-from pypdf import PdfReader
 
 def extract_pages(path: Path) -> list[tuple[int | None, str]]:
     suffix=path.suffix.lower()
     pages: list[tuple[int | None, str]] = []
     if suffix == ".pdf":
+
+        from pypdf import PdfReader
 
         pdf_pages = PdfReader(path).pages
         for index, page in enumerate(pdf_pages, start=1):
@@ -210,12 +211,12 @@ def extract_pages(path: Path) -> list[tuple[int | None, str]]:
 from pathlib import Path
 from typing import List, Tuple, Optional
 
-from langchain_core.documents import Document
-from docx import Document as DocxDocument
 
 
 def extract_pages2(path: Path) -> List[Tuple[Optional[int], str]]:
     from langchain_community.document_loaders import PyPDFLoader, TextLoader
+    from docx import Document as DocxDocument
+    from langchain_core.documents import Document
     suffix = path.suffix.lower()
     if suffix == ".pdf":
         # 使用 PyPDFLoader 替代直接 PdfReader

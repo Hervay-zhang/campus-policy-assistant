@@ -4,7 +4,6 @@ from os import mkdir
 import asyncio
 from pathlib import Path
 
-from langchain_core.documents import Document
 
 from app.config import get_settings
 from app.models import PolicyDocument, DocumentChunk
@@ -119,6 +118,8 @@ class VectorStoreService:
 
         # 此时形成了三个list ,这三个list的长度一样，根据下标获取的内容也可以一一照应上
         # 此时可以形成拉链 zip
+        from langchain_core.documents import Document
+
         doc_list: list[Document] = []
         vector_store = get_vector_store()
         for chunk_id, content, metadata in zip(chunk_ids, texts, metadatas):

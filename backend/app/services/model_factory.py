@@ -1,6 +1,3 @@
-from langchain.chat_models import init_chat_model
-from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import AIMessage
 
 from app.config import get_settings
 from app.database import SessionLocal
@@ -26,11 +23,15 @@ def create_chat_model(settings,temperature=0.5):
 
         if not s.deepseek_api_key:
             raise RuntimeError("DEEPSEEK_API_KEY 未配置")
+        from langchain.chat_models import init_chat_model
+
         model = init_chat_model(
             model_provider="openai",
             api_key=s.deepseek_api_key,
             base_url=read_model_setting("model_base_url", s.deepseek_base_url),
             temperature=temperature,
+            timeout=12,
+            max_retries=0,
             model=read_model_setting("model_name", s.deepseek_model),
         )
     else:
@@ -47,7 +48,9 @@ def create_chat_model(settings,temperature=0.5):
 
 
 async def invoke_text(model,question):
+    from langchain_core.messages import AIMessage
+
     response= await model.ainvoke(question)
     if not isinstance(response,AIMessage):
         raise TypeError(f"类型不支持，我需要的是Aimessage,而你是{type(response).__name__}")
-    return response.text,dict(response.usage_metadata)
+    return response.text,dict(response.usage_metadata or {})
