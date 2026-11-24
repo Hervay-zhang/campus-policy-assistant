@@ -1,0 +1,2 @@
+citations=[]
+print(not citations)
